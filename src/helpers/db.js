@@ -6,7 +6,7 @@ import {
   signOut,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { doc, setDoc, getDoc, getDocs, collection } from "firebase/firestore";
+import { doc, setDoc, getDoc, getDocs, collection, addDoc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../firebase";
 
 export const handleRegister = async (e, data) => {
@@ -126,4 +126,57 @@ export const getUser = async () => {
     id: doc.id,
     ...doc.data(),
   }));
+};
+
+export const getProduct = async () => {
+  const querySnapshot = await getDocs(collection(db, "products"));
+  return querySnapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
+};
+
+export const uploadToCloudinary = async (file) => {
+  const cloudName = "dxnxicfup";
+  const uploadPreset = "SHOPSMART";
+
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", uploadPreset);
+
+  const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+    method: "POST",
+    body: formData,
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    console.error("Cloudinary error:", data);
+    throw new Error(data?.error?.message || "Upload gagal");
+  }
+
+  return data.secure_url;
+};
+
+export const simpanProdukKeFirestore = async (data) => {
+  const { harga, reward, poin, imageUrl, ...rest } = data;
+
+  if (!imageUrl) {
+    throw new Error("Gambar belum berhasil diupload");
+  }
+
+  await addDoc(collection(db, "products"), {
+    ...rest,
+    imageUrl,
+    harga: Number(harga),
+    reward: Number(reward),
+    poin: Number(poin),
+    createdAt: new Date(),
+  });
+};
+
+export const editProductById = async (id, newData) => {
+  const productRef = doc(db, "products", id);
+  await updateDoc(productRef, newData);
 };
