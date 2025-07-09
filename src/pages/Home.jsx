@@ -1,24 +1,21 @@
 import React, { useState } from "react";
 import Splash from "./Splash";
 import LogoText from "../assets/LogoText";
-
 import GameButton from "../components/GameButton";
 import PageLayout from "../components/PageLayout";
 import { useNavigate } from "react-router";
 import { useAuth } from "../context/AuthContext";
 
 const Home = () => {
-  const [showSplash, setShowSplash] = useState(() => {
-    return !localStorage.getItem("hasSeenSplash");
-  });
+  const [showSplash, setShowSplash] = useState(true);
   const { auth } = useAuth();
   const navigate = useNavigate();
+
   return (
     <div>
       {showSplash ? (
         <Splash
           onContinue={() => {
-            localStorage.setItem("hasSeenSplash", "true");
             setShowSplash(false);
           }}
         />

@@ -33,8 +33,8 @@ const Register = () => {
   };
   return (
     <PageLayout isRumput={true} back={"/"} isHome={true}>
-      <div className="flex justify-center h-screen pt-20 relative z-1">
-        <div className="bg-light-blue border-2 border-white p-12 pt-16 pb-8 w-2/5 h-max rounded-3xl relative">
+      <div className="flex justify-center items-center relative z-1 h-full">
+        <div className="bg-light-blue border-2 border-white p-8 pb-6 min-w-[45%] rounded-3xl relative">
           <button
             onClick={() => {
               navigate("/");
@@ -43,10 +43,10 @@ const Register = () => {
           >
             X
           </button>
-          <h4 className="font-bold text-4xl text-center">Register</h4>
+          <h4 className="font-bold text-3xl text-center">Register</h4>
           <form className="mt-6" onSubmit={handleSubmit}>
-            <div className="flex flex-col gap-2 mb-1">
-              <label className="font-semibold text-2xl" htmlFor="nickname">
+            <div className="flex flex-col gap-1 mb-1">
+              <label className="font-semibold text-lg" htmlFor="nickname">
                 Nickname :
               </label>
               <input
@@ -60,7 +60,7 @@ const Register = () => {
               />
             </div>
             <div className="flex flex-col gap-2 mb-1">
-              <label className="font-semibold text-2xl" htmlFor="email">
+              <label className="font-semibold text-lg" htmlFor="email">
                 Email :
               </label>
               <input
@@ -74,7 +74,7 @@ const Register = () => {
               />
             </div>
             <div className="flex flex-col gap-2 mb-3">
-              <label className="font-semibold text-2xl" htmlFor="password">
+              <label className="font-semibold text-lg" htmlFor="password">
                 Password :
               </label>
               <input
@@ -90,7 +90,7 @@ const Register = () => {
             <div className="flex justify-center items-center mb-4">
               <button
                 type="submit"
-                className="py-2 px-12 rounded-xl bg-button-blue text-black border-2 border-black font-bold text-2xl transition-transform duration-200"
+                className="py-1 px-12 rounded-xl bg-button-blue text-black border-2 border-black font-bold text-xl transition-transform duration-200"
               >
                 Register
               </button>
@@ -99,20 +99,20 @@ const Register = () => {
           <div className="flex justify-center items-center">
             <button
               onClick={handleGoogle}
-              className="flex items-center gap-3 px-8 py-2 border rounded-xl bg-input-blue shadow hover:bg-gray-100 transition border-black"
+              className="flex items-center gap-3 px-6 py-2 border rounded-xl bg-input-blue shadow hover:bg-gray-100 transition border-black"
             >
               <img
                 src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
                 alt="Google"
-                className="w-8 h-8"
+                className="w-5 h-5"
               />
-              <span className="font-bold text-black text-lg">
+              <span className="font-bold text-black text-base">
                 Sign up with Google
               </span>
             </button>
           </div>
 
-          <div className="text-center mt-10 text-black font-semibold text-lg">
+          <div className="text-center mt-10 text-black font-semibold text-base">
             Sudah punya akun?{" "}
             <a href="/login" className="text-blue-500">
               Login disini

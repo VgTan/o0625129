@@ -77,7 +77,7 @@ const PageLayout = (props) => {
     <div
       className={`relative ${
         isTutorial || isGame ? "bg-game-bg" : "bg-main-bg"
-      } h-screen w-full bg-no-repeat bg-cover flex flex-col justify-between z-[100] overflow-clip`}
+      } h-screen w-full bg-no-repeat bg-cover z-[100] overflow-clip`}
     >
       {isRumput && (
         <img
@@ -88,16 +88,20 @@ const PageLayout = (props) => {
       )}
       {isHome && (
         <>
-          <img
-            src={Girl}
-            alt={"Girl"}
-            className="absolute bottom-0 left-[10%] z-[2]"
-          />
-          <img
-            src={Boy}
-            alt={"Boy"}
-            className="absolute bottom-0 right-[10%] z-[2]"
-          />
+          <div>
+            <img
+              src={Girl}
+              alt={"Girl"}
+              className="absolute bottom-0 left-[10%] z-[2] pointer-events-none w-[25%]"
+            />
+          </div>
+          <div>
+            <img
+              src={Boy}
+              alt={"Boy"}
+              className="absolute bottom-0 right-[10%] z-[2] pointer-events-none w-[28%]"
+            />
+          </div>
         </>
       )}
 

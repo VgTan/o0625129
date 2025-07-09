@@ -23,7 +23,7 @@ const GameMenu = () => {
         <img
           src={Start}
           alt={"start"}
-          className="w-52 h-52 hover:scale-105 transition-transform duration-200 cursor-pointer"
+          className="w-44 h-4w-44 hover:scale-105 transition-transform duration-200 cursor-pointer"
         />
       </button>
     </PageLayout>

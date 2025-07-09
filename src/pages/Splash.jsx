@@ -4,6 +4,7 @@ import Toko from "../assets/Toko";
 
 const Splash = ({ onContinue }) => {
   const [progress, setProgress] = useState(0);
+  const [isDone, setIsDone] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -11,15 +12,21 @@ const Splash = ({ onContinue }) => {
         const next = prev + 1;
         if (next >= 100) {
           clearInterval(interval);
-          onContinue(); // ✅ langsung lanjut saat selesai
+          setIsDone(true);
           return 100;
         }
         return next;
       });
     }, 20);
 
-    return () => clearInterval(interval); // bersih-bersih aja
-  }, [onContinue]);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (isDone) {
+      onContinue();
+    }
+  }, [isDone, onContinue]);
 
   return (
     <div className="bg-main-bg h-screen w-full bg-no-repeat bg-cover overflow-hidden flex flex-col justify-between">

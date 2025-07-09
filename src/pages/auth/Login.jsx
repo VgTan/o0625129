@@ -28,20 +28,20 @@ const Login = () => {
 
   return (
     <PageLayout isRumput={true} back={"/"} isHome={true}>
-      <div className="flex justify-center py-20 relative z-1">
-        <div className="bg-light-blue border-2 border-white p-12 pb-6 pt-12 w-2/5 h-full rounded-3xl relative">
+      <div className="flex justify-center items-center relative z-1 h-full">
+        <div className="bg-light-blue border-2 border-white p-8 pb-6 min-w-[45%] rounded-3xl relative">
           <button
             onClick={() => {
               navigate("/");
             }}
-            className="absolute top-0 right-0 px-3 py-1 bg-[#0D7497] m-3 text-white font-bold flex text-5xl rounded-tr-xl rounded-bl-xl"
+            className="absolute top-0 right-0 px-3 py-1 bg-[#0D7497] m-3 text-white font-bold flex text-3xl rounded-tr-xl rounded-bl-xl"
           >
             X
           </button>
-          <h4 className="font-bold text-4xl text-center">Login</h4>
+          <h4 className="font-bold text-3xl text-center">Login</h4>
           <form className="mt-6" onSubmit={onSubmit}>
-            <div className="flex flex-col gap-2 mb-8">
-              <label className="font-semibold text-2xl" htmlFor="email">
+            <div className="flex flex-col gap-1 mb-5">
+              <label className="font-semibold text-xl" htmlFor="email">
                 Email :
               </label>
               <input
@@ -54,8 +54,8 @@ const Login = () => {
                 required
               />
             </div>
-            <div className="flex flex-col gap-2 mb-8">
-              <label className="font-semibold text-2xl" htmlFor="password">
+            <div className="flex flex-col gap-1 mb-6">
+              <label className="font-semibold text-xl" htmlFor="password">
                 Password :
               </label>
               <input
@@ -71,16 +71,16 @@ const Login = () => {
             <div className="flex justify-center items-center">
               <button
                 type="submit"
-                className="py-2 px-12 rounded-xl bg-button-blue text-black border-2 border-black font-bold text-2xl transition-transform duration-200"
+                className="py-1 px-12 rounded-xl bg-button-blue text-black border-2 border-black font-bold text-xl transition-transform duration-200"
               >
                 Login
               </button>
             </div>
           </form>
 
-          <div className="flex items-center w-full my-6">
+          <div className="flex items-center w-full py-6">
             <div className="flex-grow border-t border-black" />
-            <span className="mx-4 text-black font-bold text-4xl">atau</span>
+            <span className="mx-4 text-black font-bold text-xl">atau</span>
             <div className="flex-grow border-t border-black" />
           </div>
 
@@ -92,13 +92,13 @@ const Login = () => {
               <img
                 src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
                 alt="Google"
-                className="w-8 h-8"
+                className="w-5 h-5"
               />
-              <span className="font-bold text-black text-lg">Login with Google</span>
+              <span className="font-bold text-black text-base">Login with Google</span>
             </button>
           </div>
 
-          <div className="text-center mt-10 text-black font-semibold text-lg">
+          <div className="text-center mt-10 text-black font-semibold text-base">
             Belum punya akun?{" "}
             <a href="/register" className="text-blue-500">
               Daftar disini

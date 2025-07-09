@@ -95,10 +95,10 @@ const Edit = () => {
         </div>
       )}
       <div className="flex justify-center items-center h-full">
-        <div className="w-11/12">
-          <div className="bg-[#62C9F0] border-2 border-black rounded-t-2xl relative flex justify-between items-center w-full">
+        <div className="w-5/6 min-h-[80vh] h-[80vh]">
+          <div className="bg-[#62C9F0] border-2 border-black rounded-t-2xl relative flex justify-between items-center w-full h-[25%]">
             <h1
-              className="text-7xl text-center p-10 font-black"
+              className="text-6xl text-center p-4 ps-8 font-black"
               style={{
                 color: "#FF6900",
                 WebkitTextStroke: "3px black",
@@ -107,9 +107,9 @@ const Edit = () => {
             >
               SHOPSMART
             </h1>
-            <div className="flex items-center">
+            <div className="flex items-center p-2">
               <h2
-                className="text-5xl text-center font-black"
+                className="text-4xl text-center font-black"
                 style={{
                   color: "#FFB32A",
                   WebkitTextStroke: "2px black",
@@ -118,53 +118,53 @@ const Edit = () => {
               >
                 Admin Shop
               </h2>
-              <img src={Icon} alt="admin_icon" className="h-min" />
+              <img src={Icon} alt="admin_icon" className="h-24" />
             </div>
           </div>
-          <div className="bg-[#FFB32A] w-full border-2 border-black flex">
+          <div className="bg-[#FFB32A] w-full border-2 border-black flex h-[10%]">
             <div
               onClick={() => setIndex(0)}
-              className={`cursor-pointer px-4 py-8 rounded w-1/4 h-full ${
+              className={`flex items-center cursor-pointer px-4 rounded w-1/4 h-full ${
                 index === 0
                   ? "bg-[#FE9201F7] text-black font-bold"
                   : "font-semibold"
               }`}
             >
-              <p className="text-xl font-inter">Data Pemain</p>
+              <p className="text-lg font-inter">Data Pemain</p>
             </div>
             <div
               onClick={() => setIndex(1)}
-              className={`cursor-pointer px-4 py-8 rounded w-1/4 h-full ${
+              className={`flex items-center cursor-pointer px-4 rounded w-1/4 h-full ${
                 index === 1
                   ? "bg-[#FE9201F7] text-black font-bold"
                   : "font-semibold"
               }`}
             >
-              <p className="text-xl font-inter">Produk Game</p>
+              <p className="text-lg font-inter">Produk Game</p>
             </div>
             <div
               onClick={() => setIndex(2)}
-              className={`cursor-pointer px-4 py-8 rounded w-1/4 h-full ${
+              className={`flex items-center cursor-pointer px-4 rounded w-1/4 h-full ${
                 index === 2
                   ? "bg-[#FE9201F7] text-black font-bold"
                   : "font-semibold"
               }`}
             >
-              <p className="text-xl font-inter">Peringkat</p>
+              <p className="text-lg font-inter">Peringkat</p>
             </div>
             <div
               onClick={() => setIndex(3)}
-              className={`cursor-pointer px-4 py-8 rounded w-1/4 h-full ${
+              className={`flex items-center cursor-pointer px-4 rounded w-1/4 h-full ${
                 index === 3
                   ? "bg-[#FE9201F7] text-black font-bold"
                   : "font-semibold"
               }`}
             >
-              <p className="text-xl font-inter">Pengaturan</p>
+              <p className="text-lg font-inter">Pengaturan</p>
             </div>
           </div>
 
-          <div className="bg-[#FE9000] p-10 border-2 border-black">
+          <div className="bg-[#FE9000] p-6 border-2 border-black h-[65%] rounded-b-2xl w-full">
             {index === 0 && <DataPemain users={users} />}
             {index === 1 && (
               <ProdukGame
@@ -194,7 +194,7 @@ const DataPemain = (props) => {
   const { users } = props;
   return (
     <div className="h-full overflow-y-auto">
-      <div className="flex bg-[#FEA01A] text-center w-full border-2 border-black font-inter font-bold text-2xl py-4 rounded-t-2xl">
+      <div className="flex bg-[#FEA01A] text-center w-full border-2 border-black font-inter font-bold text-lg rounded-t-2xl items-center h-[20%]">
         <p className="w-[24%]">Nama Pemain</p>
         <p className="w-[24%]">Banyak Putaran</p>
         <p className="w-[24%]">Poin Barang</p>
@@ -203,32 +203,34 @@ const DataPemain = (props) => {
           <img
             src={EditIcon}
             alt="sampah"
-            className="w-10 h-10 rounded-full object-cover"
+            className="w-8 h-8 rounded-full object-cover"
           />
         </div>
       </div>
-      <div className="bg-[#FFDE9A] border-2 border-black text-center rounded-b-2xl flex flex-col h-80 overflow-y-auto">
+      <div className="bg-[#FFDE9A] border-2 border-black text-center rounded-b-2xl flex flex-col h-[80%] overflow-y-auto">
         {users.map((user, index) => (
           <div
             key={user.id}
-            className="flex border-b-2 border-black text-center text-xl font-inter font-bold"
+            className="flex border-b-2 border-black text-center text-base font-inter font-bold"
           >
-            <p className="w-[24%] py-4">{user.displayName || "N/A"}</p>
-            <p className="w-[24%] py-4">{user.rounds || 0}</p>
-            <p className="w-[24%] py-4">{user.points || 0}</p>
+            <p className="w-[24%] flex items-center justify-center">
+              {user.displayName || "N/A"}
+            </p>
+            <p className="w-[24%] flex items-center justify-center">
+              {user.rounds || 0}
+            </p>
+            <p className="w-[24%] flex items-center justify-center">
+              {user.points || 0}
+            </p>
             <div className="w-[24%] flex justify-center items-center py-2">
               <img
                 src={user.photoURL || "https://via.placeholder.com/40"}
                 alt="profile"
-                className="w-10 h-10 rounded-full object-cover"
+                className="w-8 h-8 rounded-full object-cover"
               />
             </div>
             <div className="w-[4%] flex justify-center items-center p-2">
-              <img
-                src={Sampah}
-                alt="sampah"
-                className="w-10 h-10 object-cover"
-              />
+              <img src={Sampah} alt="sampah" className="w-8 h-8 object-cover" />
             </div>
           </div>
         ))}
@@ -243,8 +245,8 @@ const ProdukGame = (props) => {
   const [selectedProduct, setSelectedProduct] = useState();
 
   return (
-    <div className="">
-      <div className="flex bg-[#FEA01A] text-center w-full border-2 border-black font-inter font-bold text-2xl py-4 rounded-t-2xl">
+    <div className="h-full">
+      <div className="flex bg-[#FEA01A] text-center w-full border-2 border-black font-inter font-bold text-lg rounded-t-2xl items-center h-[20%]">
         <p className="w-[15%]">Produk</p>
         <p className="w-[15%]">Nama</p>
         <p className="w-[15%]">Harga</p>
@@ -258,38 +260,34 @@ const ProdukGame = (props) => {
           <img
             src={EditIcon}
             alt="edit"
-            className="w-10 h-10 rounded-full object-cover"
+            className="w-8 h-8 rounded-full object-cover"
           />
         </div>
       </div>
-      <div className="bg-[#FFDE9A] border-2 border-black text-center rounded-b-2xl flex flex-col h-80 overflow-y-auto">
+      <div className="bg-[#FFDE9A] border-2 border-black text-center rounded-b-2xl flex flex-col h-[80%] overflow-y-auto">
         {products &&
           products?.map((product, index) => (
             <div
               key={product.id}
-              className="flex border-b-2 border-black text-center items-center text-xl font-inter font-bold"
+              className="flex border-b-2 border-black text-center items-center text-base font-inter font-bold"
             >
-              <p className="w-[15%] py-4 capitalize">
-                {product.kategori || "N/A"}
-              </p>
-              <p className="w-[15%] py-4">{product.nama || 0}</p>
-              <p className="w-[15%] py-4">
-                {getPriceFormat(product.harga) || 0}
-              </p>
+              <p className="w-[15%] capitalize">{product.kategori || "N/A"}</p>
+              <p className="w-[15%]">{product.nama || 0}</p>
+              <p className="w-[15%]">{getPriceFormat(product.harga) || 0}</p>
               <div className="w-[15%] flex justify-center items-center py-2">
                 <img
                   src={product.imageUrl}
                   alt="profile"
-                  className="w-14 h-14 object-cover"
+                  className="w-10 h-10 object-cover"
                 />
               </div>
-              <p className="w-[15%] py-4">{product.reward || 0}</p>
-              <p className="w-[15%] py-4">{product.poin || 0}</p>
+              <p className="w-[15%]">{product.reward || 0}</p>
+              <p className="w-[15%]">{product.poin || 0}</p>
               <div className="w-[10%] flex justify-center items-center p-2 gap-5">
                 <img
                   src={Sampah}
                   alt="sampah"
-                  className="w-10 h-10 object-cover cursor-pointer"
+                  className="w-8 h-8 object-cover cursor-pointer"
                   onClick={() => {
                     handleDelete("product", product);
                   }}
@@ -297,7 +295,7 @@ const ProdukGame = (props) => {
                 <img
                   src={Plus}
                   alt="Plus"
-                  className="w-10 h-10 object-cover cursor-pointer"
+                  className="w-8 h-8 object-cover cursor-pointer"
                   onClick={() => {
                     setModal(true);
                     setSelectedProduct(product);
@@ -323,19 +321,57 @@ const ProdukGame = (props) => {
 
 const Peringkat = () => {
   return (
-    <>
-      <div className="bg-[#FEA01A] text-center w-full border-2 border-black font-inter font-bold text-3xl py-4 rounded-t-2xl">
-        <h3>SELAMAT DATANG DI MINSHOP!</h3>
+    <div className="h-full">
+      <div className="flex bg-[#FEA01A] text-center w-full border-2 border-black font-inter font-bold text-lg rounded-t-2xl items-center h-[20%]">
+        {/* <p className="w-[15%]">Produk</p>
+        <p className="w-[15%]">Nama</p>
+        <p className="w-[15%]">Harga</p>
+        <p className="w-[15%]">Foto</p>
+        <p className="w-[15%]">Reward</p>
+        <p className="w-[15%]">Poin</p> */}
       </div>
-      <div className="bg-[#FFDE9A] border-2 border-black text-center rounded-b-2xl py-12">
-        <p className="text-3xl font-semibold text-black p-12 px-24">
-          Silahkan kelola dan edit konten game dengan mudah dan efisien melalui
-          panel ini. Pastikan semua data selalu up to date untuk pengalaman
-          pemain yang optimal.
-        </p>
-        <div className="flex justify-center items-center"></div>
+      <div className="bg-[#FFDE9A] border-2 border-black text-center rounded-b-2xl flex flex-col h-[80%] overflow-y-auto">
+        {/* {products &&
+          products?.map((product, index) => (
+            <div
+              key={product.id}
+              className="flex border-b-2 border-black text-center items-center text-base font-inter font-bold"
+            >
+              <p className="w-[15%] capitalize">{product.kategori || "N/A"}</p>
+              <p className="w-[15%]">{product.nama || 0}</p>
+              <p className="w-[15%]">{getPriceFormat(product.harga) || 0}</p>
+              <div className="w-[15%] flex justify-center items-center py-2">
+                <img
+                  src={product.imageUrl}
+                  alt="profile"
+                  className="w-10 h-10 object-cover"
+                />
+              </div>
+              <p className="w-[15%]">{product.reward || 0}</p>
+              <p className="w-[15%]">{product.poin || 0}</p>
+              <div className="w-[10%] flex justify-center items-center p-2 gap-5">
+                <img
+                  src={Sampah}
+                  alt="sampah"
+                  className="w-8 h-8 object-cover cursor-pointer"
+                  onClick={() => {
+                    handleDelete("product", product);
+                  }}
+                />
+                <img
+                  src={Plus}
+                  alt="Plus"
+                  className="w-8 h-8 object-cover cursor-pointer"
+                  onClick={() => {
+                    setModal(true);
+                    setSelectedProduct(product);
+                  }}
+                />
+              </div>
+            </div>
+          ))} */}
       </div>
-    </>
+    </div>
   );
 };
 
@@ -346,7 +382,7 @@ const Pengaturan = (props) => {
   const [selectedSetting, setSelectedSetting] = useState(null);
   return (
     <div className="h-full overflow-y-auto">
-      <div className="flex bg-[#FEA01A] text-center w-full border-2 border-black font-inter font-bold text-2xl py-4 rounded-t-2xl">
+      <div className="flex bg-[#FEA01A] text-center w-full border-2 border-black font-inter font-bold text- rounded-t-2xl items-center h-[20%]">
         <p className="w-[45%]">Waktu</p>
         <p className="w-[45%]">Putaran Ke-</p>
         <div
@@ -356,16 +392,16 @@ const Pengaturan = (props) => {
           <img
             src={EditIcon}
             alt="edit"
-            className="w-10 h-10 rounded-full object-cover"
+            className="w-8 h-8 rounded-full object-cover"
           />
         </div>
       </div>
-      <div className="bg-[#FFDE9A] border-2 border-black text-center rounded-b-2xl flex flex-col h-80 overflow-y-auto">
+      <div className="bg-[#FFDE9A] border-2 border-black text-center rounded-b-2xl flex flex-col h-[80%] overflow-y-auto">
         {settings?.length > 0 &&
           settings.map((setting, index) => (
             <div
               key={setting?.id}
-              className="flex border-b-2 border-black text-center text-xl font-inter font-bold"
+              className="flex border-b-2 border-black text-center text-sm font-inter font-bold"
             >
               <p className="w-[45%] py-4">{setting?.round || 0}</p>
               <p className="w-[45%] py-4">{setting?.waktu || 0} detik</p>
@@ -373,7 +409,7 @@ const Pengaturan = (props) => {
                 <img
                   src={Sampah}
                   alt="sampah"
-                  className="w-10 h-10 object-cover cursor-pointer"
+                  className="w-8 h-8 object-cover cursor-pointer"
                   onClick={() => {
                     handleDelete("setting", setting);
                   }}
@@ -381,7 +417,7 @@ const Pengaturan = (props) => {
                 <img
                   src={Plus}
                   alt="Plus"
-                  className="w-10 h-10 object-cover cursor-pointer"
+                  className="w-8 h-8 object-cover cursor-pointer"
                   onClick={() => {
                     setModal(true);
                     setSelectedSetting(setting);
@@ -578,7 +614,7 @@ const ModalProduk = (props) => {
                 className="w-full h-full object-cover"
               />
             ) : (
-              <img src="/camera-icon.svg" alt="Upload" className="w-10 h-10" />
+              <img src="/camera-icon.svg" alt="Upload" className="w-8 h-8" />
             )}
           </div>
           <input

@@ -36,9 +36,9 @@ const GamePlay = () => {
           <img src={GamePic} alt="panduan" className="" />
         </div>
         <div className="w-1/2 flex items-end justify-center lg:pb-24 md:pb-16 pb-12 h-full">
-          <div className="bg-[#825829] border-[#825829] lg:border-[25px] border-[10px] rounded-3xl w-full relative">
-            <div className="bg-[#f5d28d] rounded-3xl w-full h-full lg:p-8 p-2 flex flex-col lg:gap-12 gap-3 lg:py-[10%] py-[5%]">
-              <div className="bg-[#825829] flex w-full rounded-xl p-3">
+          <div className="bg-[#825829] border-[#825829] lg:border-[25px] border-[10px] rounded-3xl w-full relative min-h-[70vh] max-h-[100vh]">
+            <div className="bg-[#f5d28d] rounded-3xl w-full h-full lg:p-5 p-1 flex flex-col justify-center min-h-[70vh] max-h-[70vh]">
+              <div className="bg-[#825829] flex w-full rounded-xl">
                 {tabPage === 1 && (
                   <button
                     onClick={() => setTabPage(0)}

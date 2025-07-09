@@ -9,7 +9,7 @@ const AdminLayout = (props) => {
   const navigate = useNavigate();
   return (
     <div
-      className={`relative bg-game-bg h-screen w-full bg-no-repeat bg-cover flex flex-col justify-between z-[100] overflow-clip`}
+      className={`relative bg-game-bg h-screen w-full bg-no-repeat bg-cover flex flex-col justify-between z-[100]`}
     >
       <div className="absolute top-0 left-0 p-5 z-10 flex flex-col items-center gap-5">
         {back && (
