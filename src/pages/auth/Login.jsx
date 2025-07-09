@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+  import React, { useState } from "react";
 import PageLayout from "../../components/PageLayout";
 import { useNavigate } from "react-router";
 import { handleGoogleLogin, handleLogin } from "../../helpers/db";
@@ -28,8 +28,8 @@ const Login = () => {
 
   return (
     <PageLayout isRumput={true} back={"/"} isHome={true}>
-      <div className="flex justify-center h-screen pt-20 relative z-1">
-        <div className="bg-light-blue border-2 border-white p-12 pt-16 pb-8 w-2/5 h-max rounded-3xl relative">
+      <div className="flex justify-center py-20 relative z-1">
+        <div className="bg-light-blue border-2 border-white p-12 pb-6 pt-12 w-2/5 h-full rounded-3xl relative">
           <button
             onClick={() => {
               navigate("/");

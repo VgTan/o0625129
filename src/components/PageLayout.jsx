@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import PadangRumput from "../assets/images/padangrumput.svg";
 import SoundOff from "../assets/images/suarahening.svg";
 import SoundOn from "../assets/images/suara.svg";
@@ -9,7 +9,7 @@ import Uang from "../assets/images/uang.svg";
 import Timer from "../assets/images/timer.svg";
 import Account from "../assets/images/buttonorang.svg";
 import Logout from "../assets/images/Removal-998 1.svg";
-import { handleLogout } from "../helpers/db";
+import { getSetting, handleLogout } from "../helpers/db";
 import { useNavigate } from "react-router";
 const PageLayout = (props) => {
   const {
@@ -24,6 +24,55 @@ const PageLayout = (props) => {
   } = props;
   const [isMute, setMute] = useState(false);
   const navigate = useNavigate();
+  const [settings, setSettings] = useState();
+  const [timer, setTimer] = useState(0);
+  const [isCounting, setIsCounting] = useState(false);
+  const hasStartedRef = useRef(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const settingsData = await getSetting();
+      setSettings(settingsData);
+
+      const waktuDetik = settingsData[0]?.waktu || 20;
+      if (isGame) {
+        setTimer(waktuDetik);
+      }
+    };
+
+    fetchData();
+  }, [isGame]);
+
+  useEffect(() => {
+    if (!isGame || settings?.length === 0) return;
+
+    let interval;
+    const waktuDetik = timer || 20;
+    let sisa = waktuDetik;
+
+    const handleMouseClick = (e) => {
+      if (e.button === 0 && !hasStartedRef.current) {
+        hasStartedRef.current = true;
+        setTimer(sisa);
+
+        interval = setInterval(() => {
+          sisa -= 1;
+          setTimer(Math.max(sisa, 0));
+
+          if (sisa <= 0) {
+            clearInterval(interval);
+          }
+        }, 1000);
+      }
+    };
+
+    window.addEventListener("mousedown", handleMouseClick);
+    return () => {
+      window.removeEventListener("mousedown", handleMouseClick);
+      clearInterval(interval);
+    };
+  }, [isGame, settings]);
+
   return (
     <div
       className={`relative ${
@@ -83,7 +132,7 @@ const PageLayout = (props) => {
         <div className="absolute top-[10%] left-[10%] z-10 rounded-3xl flex flex-col gap-5">
           <div className="flex items-center bg-white/70 px-3 py-2 gap-3 rounded-xl">
             <img src={Timer} alt="Game" className="w-10 h-10" />
-            <p className="font-bold font-inter text-2xl">20 Detik</p>
+            <p className="font-bold font-inter text-2xl">{timer} Detik</p>
           </div>
           <div className="flex items-center bg-white/70 px-3 py-2 gap-3 rounded-xl">
             <img src={Uang} alt="Game" className="w-10 h-10" />

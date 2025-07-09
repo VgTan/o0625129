@@ -6,7 +6,16 @@ import {
   signOut,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { doc, setDoc, getDoc, getDocs, collection, addDoc, updateDoc } from "firebase/firestore";
+import {
+  doc,
+  setDoc,
+  getDoc,
+  getDocs,
+  collection,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+} from "firebase/firestore";
 import { auth, db } from "../firebase";
 
 export const handleRegister = async (e, data) => {
@@ -136,6 +145,14 @@ export const getProduct = async () => {
   }));
 };
 
+export const getSetting = async () => {
+  const querySnapshot = await getDocs(collection(db, "settings"));
+  return querySnapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
+};
+
 export const uploadToCloudinary = async (file) => {
   const cloudName = "dxnxicfup";
   const uploadPreset = "SHOPSMART";
@@ -144,10 +161,13 @@ export const uploadToCloudinary = async (file) => {
   formData.append("file", file);
   formData.append("upload_preset", uploadPreset);
 
-  const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
-    method: "POST",
-    body: formData,
-  });
+  const res = await fetch(
+    `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+    {
+      method: "POST",
+      body: formData,
+    }
+  );
 
   const data = await res.json();
 
@@ -166,7 +186,7 @@ export const simpanProdukKeFirestore = async (data) => {
     throw new Error("Gambar belum berhasil diupload");
   }
 
-  await addDoc(collection(db, "products"), {
+  const docRef = await addDoc(collection(db, "products"), {
     ...rest,
     imageUrl,
     harga: Number(harga),
@@ -174,9 +194,45 @@ export const simpanProdukKeFirestore = async (data) => {
     poin: Number(poin),
     createdAt: new Date(),
   });
-};
 
+  return {
+    ...rest,
+    imageUrl,
+    harga: Number(harga),
+    reward: Number(reward),
+    poin: Number(poin),
+    id: docRef.id,
+  };
+};
 export const editProductById = async (id, newData) => {
   const productRef = doc(db, "products", id);
   await updateDoc(productRef, newData);
+};
+
+export const deleteProductById = async (id, newData) => {
+  const productRef = doc(db, "products", id);
+  await deleteDoc(productRef, newData);
+};
+
+export const simpanSettingKeFirestore = async (data) => {
+  const { waktu, round, ...rest } = data;
+
+  const docRef = await addDoc(collection(db, "settings"), {
+    ...rest,
+    waktu: Number(waktu),
+    round: Number(round),
+    createdAt: new Date(),
+  });
+
+  return { ...data, waktu: Number(waktu), round: Number(round), id: docRef.id };
+};
+
+export const editSettingById = async (id, newData) => {
+  const productRef = doc(db, "settings", id);
+  await updateDoc(productRef, newData);
+};
+
+export const deleteSettingById = async (id, newData) => {
+  const productRef = doc(db, "settings", id);
+  await deleteDoc(productRef, newData);
 };

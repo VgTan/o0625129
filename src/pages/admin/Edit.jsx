@@ -7,10 +7,15 @@ import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router";
 import AdminLayout from "../../components/AdminLayout";
 import {
+  deleteProductById,
+  deleteSettingById,
   editProductById,
+  editSettingById,
   getProduct,
+  getSetting,
   getUser,
   simpanProdukKeFirestore,
+  simpanSettingKeFirestore,
   uploadToCloudinary,
 } from "../../helpers/db";
 import { getPriceFormat } from "../../helpers/helper";
@@ -19,19 +24,44 @@ const Edit = () => {
   const [index, setIndex] = useState(0);
   const [users, setUsers] = useState([]);
   const [products, setProducts] = useState([]);
+  const [settings, setSettings] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const usersData = await getUser();
-      setUsers(usersData);
-      const productsData = await getProduct();
-      setProducts(productsData);
-    };
+  const fetchData = async () => {
+    const usersData = await getUser();
+    setUsers(usersData);
 
+    const productsData = await getProduct();
+    setProducts(productsData);
+
+    const settingsData = await getSetting();
+    setSettings(settingsData);
+  };
+
+  useEffect(() => {
     fetchData();
   }, []);
 
+  const handleDelete = async (type, data) => {
+    const confirmed = window.confirm("Yakin ingin menghapus data ini?");
+    if (!confirmed) return;
+    setLoading(true);
+    try {
+      if (type === "setting") {
+        await deleteSettingById(data.id);
+        setSettings((prev) => prev.filter((item) => item.id !== data.id));
+      }
+      if (type === "product") {
+        await deleteProductById(data.id);
+        setProducts((prev) => prev.filter((item) => item.id !== data.id));
+      }
+    } catch (e) {
+      alert("Data gagal dihapus");
+    } finally {
+      setLoading(false);
+      alert("Data berhasil dihapus");
+    }
+  };
   return (
     <AdminLayout isAdmin={true} back>
       {loading && (
@@ -137,10 +167,22 @@ const Edit = () => {
           <div className="bg-[#FE9000] p-10 border-2 border-black">
             {index === 0 && <DataPemain users={users} />}
             {index === 1 && (
-              <ProdukGame products={products} setLoading={setLoading} />
+              <ProdukGame
+                products={products}
+                setLoading={setLoading}
+                handleDelete={handleDelete}
+                setProducts={setProducts}
+              />
             )}
             {index === 2 && <Peringkat />}
-            {index === 3 && <Pengaturan />}
+            {index === 3 && (
+              <Pengaturan
+                setSettings={setSettings}
+                settings={settings}
+                setLoading={setLoading}
+                handleDelete={handleDelete}
+              />
+            )}
           </div>
         </div>
       </div>
@@ -196,9 +238,10 @@ const DataPemain = (props) => {
 };
 
 const ProdukGame = (props) => {
-  const { products, setLoading } = props;
+  const { products, setLoading, handleDelete, setProducts } = props;
   const [isModal, setModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState();
+
   return (
     <div className="">
       <div className="flex bg-[#FEA01A] text-center w-full border-2 border-black font-inter font-bold text-2xl py-4 rounded-t-2xl">
@@ -209,7 +252,7 @@ const ProdukGame = (props) => {
         <p className="w-[15%]">Reward</p>
         <p className="w-[15%]">Poin</p>
         <div
-          className="w-[10%] flex justify-center items-center"
+          className="w-[10%] flex justify-center items-center cursor-pointer"
           onClick={() => setModal(true)}
         >
           <img
@@ -226,7 +269,9 @@ const ProdukGame = (props) => {
               key={product.id}
               className="flex border-b-2 border-black text-center items-center text-xl font-inter font-bold"
             >
-              <p className="w-[15%] py-4">{product.kategori || "N/A"}</p>
+              <p className="w-[15%] py-4 capitalize">
+                {product.kategori || "N/A"}
+              </p>
               <p className="w-[15%] py-4">{product.nama || 0}</p>
               <p className="w-[15%] py-4">
                 {getPriceFormat(product.harga) || 0}
@@ -244,12 +289,15 @@ const ProdukGame = (props) => {
                 <img
                   src={Sampah}
                   alt="sampah"
-                  className="w-10 h-10 object-cover"
+                  className="w-10 h-10 object-cover cursor-pointer"
+                  onClick={() => {
+                    handleDelete("product", product);
+                  }}
                 />
                 <img
                   src={Plus}
                   alt="Plus"
-                  className="w-10 h-10 object-cover"
+                  className="w-10 h-10 object-cover cursor-pointer"
                   onClick={() => {
                     setModal(true);
                     setSelectedProduct(product);
@@ -261,6 +309,8 @@ const ProdukGame = (props) => {
       </div>
       {isModal && (
         <ModalProduk
+          products={products}
+          setProducts={setProducts}
           setModal={setModal}
           setLoading={setLoading}
           selectedProduct={selectedProduct}
@@ -289,26 +339,80 @@ const Peringkat = () => {
   );
 };
 
-const Pengaturan = () => {
+const Pengaturan = (props) => {
+  const { settings, handleDelete, setSettings } = props;
+  const [isModal, setModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [selectedSetting, setSelectedSetting] = useState(null);
   return (
-    <>
-      <div className="bg-[#FEA01A] text-center w-full border-2 border-black font-inter font-bold text-3xl py-4 rounded-t-2xl">
-        <h3>SELAMAT DATANG DI MINSHOP!</h3>
+    <div className="h-full overflow-y-auto">
+      <div className="flex bg-[#FEA01A] text-center w-full border-2 border-black font-inter font-bold text-2xl py-4 rounded-t-2xl">
+        <p className="w-[45%]">Waktu</p>
+        <p className="w-[45%]">Putaran Ke-</p>
+        <div
+          className="w-[10%] flex justify-center items-center cursor-pointer"
+          onClick={() => setModal(true)}
+        >
+          <img
+            src={EditIcon}
+            alt="edit"
+            className="w-10 h-10 rounded-full object-cover"
+          />
+        </div>
       </div>
-      <div className="bg-[#FFDE9A] border-2 border-black text-center rounded-b-2xl py-12">
-        <p className="text-3xl font-semibold text-black p-12 px-24">
-          Silahkan kelola dan edit konten game dengan mudah dan efisien melalui
-          panel ini. Pastikan semua data selalu up to date untuk pengalaman
-          pemain yang optimal.
-        </p>
-        <div className="flex justify-center items-center"></div>
+      <div className="bg-[#FFDE9A] border-2 border-black text-center rounded-b-2xl flex flex-col h-80 overflow-y-auto">
+        {settings?.length > 0 &&
+          settings.map((setting, index) => (
+            <div
+              key={setting?.id}
+              className="flex border-b-2 border-black text-center text-xl font-inter font-bold"
+            >
+              <p className="w-[45%] py-4">{setting?.round || 0}</p>
+              <p className="w-[45%] py-4">{setting?.waktu || 0} detik</p>
+              <div className="w-[10%] flex justify-center items-center p-2 gap-5">
+                <img
+                  src={Sampah}
+                  alt="sampah"
+                  className="w-10 h-10 object-cover cursor-pointer"
+                  onClick={() => {
+                    handleDelete("setting", setting);
+                  }}
+                />
+                <img
+                  src={Plus}
+                  alt="Plus"
+                  className="w-10 h-10 object-cover cursor-pointer"
+                  onClick={() => {
+                    setModal(true);
+                    setSelectedSetting(setting);
+                  }}
+                />
+              </div>
+            </div>
+          ))}
       </div>
-    </>
+      {isModal && (
+        <ModalSetting
+          setModal={setModal}
+          setLoading={setLoading}
+          selectedSetting={selectedSetting}
+          setSettings={setSettings}
+          setSelectedSetting={setSelectedSetting}
+        />
+      )}
+    </div>
   );
 };
 
 const ModalProduk = (props) => {
-  const { setModal, setLoading, selectedProduct, setSelectedProduct } = props;
+  const {
+    setModal,
+    setLoading,
+    products,
+    setProducts,
+    selectedProduct,
+    setSelectedProduct,
+  } = props;
   const [form, setForm] = useState({
     kategori: "",
     nama: "",
@@ -332,9 +436,11 @@ const ModalProduk = (props) => {
       setPreview(selectedProduct.imageUrl || null);
     }
   }, [selectedProduct]);
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -374,9 +480,17 @@ const ModalProduk = (props) => {
 
       if (selectedProduct?.id) {
         await editProductById(selectedProduct.id, productData);
+        setProducts((prev) =>
+          prev.map((p) =>
+            p.id === selectedProduct.id
+              ? { ...productData, id: selectedProduct.id }
+              : p
+          )
+        );
         alert("Produk berhasil diupdate!");
       } else {
-        await simpanProdukKeFirestore(productData);
+        const newProduct = await simpanProdukKeFirestore(productData);
+        setProducts((prev) => [...prev, newProduct]);
         alert("Produk berhasil disimpan!");
       }
 
@@ -492,6 +606,137 @@ const ModalProduk = (props) => {
           className="py-1 px-10 rounded-xl bg-button-blue text-black border-2 border-black font-bold text-xl transition-transform duration-200"
         >
           {selectedProduct ? "Simpan Perubahan" : "Tambahkan"}
+        </button>
+      </div>
+    </div>
+  );
+};
+
+const ModalSetting = (props) => {
+  const {
+    setModal,
+    setLoading,
+    selectedSetting,
+    setSelectedSetting,
+    setSettings,
+  } = props;
+  const [form, setForm] = useState({
+    round: "",
+    waktu: "",
+  });
+
+  useEffect(() => {
+    if (selectedSetting) {
+      setForm({
+        round: selectedSetting.round || "",
+        waktu: selectedSetting.waktu || "",
+      });
+    }
+  }, [selectedSetting]);
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    if (!form.round || !form.waktu) {
+      alert("Lengkapi semua data terlebih dahulu!");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const settingData = {
+        ...form,
+        waktu: Number(form.waktu),
+        round: Number(form.round),
+      };
+
+      if (selectedSetting?.id) {
+        await editSettingById(selectedSetting.id, settingData);
+        setSettings((prev) =>
+          prev.map((p) =>
+            p.id === selectedSetting.id
+              ? { ...settingData, id: selectedSetting.id }
+              : p
+          )
+        );
+        alert("Pengaturan berhasil diupdate!");
+      } else {
+        const newSetting = await simpanSettingKeFirestore(settingData);
+        console.log(newSetting);
+        setSettings((prev) => [...prev, newSetting]);
+
+        alert("Pengaturan berhasil disimpan!");
+      }
+
+      setForm({ round: "", waktu: "" });
+      setModal(false);
+      setSelectedSetting(null);
+    } catch (err) {
+      console.error(err);
+      alert("Gagal menyimpan pengaturan: " + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  return (
+    <div className="bg-[#FA8A00] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl border-white border-2 px-4 min-w-[50%]">
+      <div className="flex gap-12 items-center justify-center relative">
+        <div className="w-1/6">
+          <img src={Icon} alt="icon" />
+        </div>
+        <div className="w-5/6">
+          <p
+            className="text-5xl text-start p-10 font-black tracking-tighter"
+            style={{
+              color: "#FFB32A",
+              WebkitTextStroke: "2px black",
+              fontFamily: "sans-serif",
+            }}
+          >
+            MINSHOP PRODUK
+          </p>
+        </div>
+      </div>
+      <div className="flex flex-col gap-5 items-center justify-center mt-8 px-8">
+        {/* Input lainnya */}
+        {["putaran ke-", "waktu (detik)"].map((field) => (
+          <div
+            key={field}
+            className="flex flex-col gap-2 items-center justify-center"
+          >
+            <label className="text-black text-2xl font-bold capitalize">
+              {field}
+            </label>
+            <input
+              type="number"
+              name={field === "putaran ke-" ? "round" : "waktu"}
+              value={form[field === "putaran ke-" ? "round" : "waktu"]}
+              onChange={handleChange}
+              className="bg-[#F6B35D] border border-black rounded px-3 py-1 text-center"
+            />
+          </div>
+        ))}
+      </div>
+
+      <div className="flex justify-evenly items-center mt-8 translate-y-1/2">
+        <button
+          onClick={() => {
+            setModal(false);
+            setSelectedSetting(null);
+          }}
+          className="py-1 px-10 rounded-xl bg-[#FC9700] text-black border-2 border-black font-bold text-xl transition-transform duration-200"
+        >
+          Kembali
+        </button>
+        <button
+          onClick={handleSubmit}
+          className="py-1 px-10 rounded-xl bg-button-blue text-black border-2 border-black font-bold text-xl transition-transform duration-200"
+        >
+          {selectedSetting ? "Simpan Perubahan" : "Tambahkan"}
         </button>
       </div>
     </div>

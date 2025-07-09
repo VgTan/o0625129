@@ -3,14 +3,14 @@ import PageLayout from "../../components/PageLayout";
 import panduanImg from "../../assets/images/cwpanduan.svg";
 import GamePic from "../../assets/images/gamePic.svg";
 import { useNavigate } from "react-router";
-import { getProduct } from "../../helpers/db";
+import { getProduct, getSetting } from "../../helpers/db";
 import { getPriceFormat } from "../../helpers/helper";
 import GameButton from "../../components/GameButton";
 const GamePlay = () => {
   const [index, setIndex] = useState(0);
   const [tabPage, setTabPage] = useState(0);
   const [products, setProducts] = useState([]);
-  console.log(index);
+  const [timer, setTimer] = useState(0);
   useEffect(() => {
     const fetchData = async () => {
       const productsData = await getProduct();
